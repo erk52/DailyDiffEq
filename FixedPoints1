@@ -1,0 +1,43 @@
+import numpy as np
+import matplotlib.pyplot as plt
+%matplotlib inline
+from ipywidgets import interact, interactive
+from IPython.display import clear_output, display, HTML
+
+def solve_dynamics(r = 0):
+
+    #Finding fixed points and stability for 
+    # x' = x + rx/(1+x^2)
+    
+    fig = plt.figure()
+    ax = fig.add_axes([0, 0, 1, 1])
+    
+    # prepare the axes limits
+    ax.set_xlim((-5, 5))
+    ax.set_ylim((-5, 5))
+    
+    #calculate x' and x
+    x = np.linspace(-5, 5,200)
+    x_p = np.asarray([a + r*a/(1+a**2) for a in x])
+    
+    lines = ax.plot(x, x_p, '-')
+    plt.setp(lines, linewidth=2)
+    
+    #Let's look at fixed points
+    #red for unstable and blue for stable
+    if r >= -1:
+        fixed = ax.plot([0], [0], 'ro', markersize=12)
+    else:
+        stable = ax.plot([0], [0], 'bo', markersize=12)
+        un_x1 = np.sqrt(-1 - r)
+        un_x2 = -np.sqrt(-1- r)
+        f1 = ax.plot([un_x1, un_x2], [0,0], 'ro', markersize=12)
+    
+
+    #ax.view_init(30, angle)
+    plt.show()
+    ax.set_xlabel('x', fontsize=18)
+    return None
+    
+w = interactive(solve_dynamics, r=(-5.0,5.0))
+display(w)
